@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 export class Box {
+    private static counter = 0;
     private originalBox: THREE.Mesh;
 
     constructor(boxSize: number) {
@@ -11,6 +12,8 @@ export class Box {
                                                         shininess: 50,
                                                         flatShading: true 
                                                     });
+        Box.counter += 1;
+        geometry.name = `Box${Box.counter}`;
 
         this.originalBox = new THREE.Mesh(geometry, material);
     }

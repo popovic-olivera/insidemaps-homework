@@ -3,8 +3,8 @@ import * as THREE from "three";
 export class Plane {
     private originalPlane: THREE.Mesh;
 
-    constructor(private width = 1600,
-                private height = 1600,
+    constructor(private width = 2000,
+                private height = 2000,
                 private color = 0xffff00) {
         const geometry = new THREE.PlaneBufferGeometry(this.width, this.height);
         const material = new THREE.MeshBasicMaterial({color: this.color});

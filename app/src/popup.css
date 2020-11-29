@@ -1,0 +1,23 @@
+.popup {
+    position: absolute;
+    display: none;
+    z-index: 100;
+    padding: 0.5em;
+    width: 200px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: .5em;
+    font-size: medium;
+    line-height: 1.2;
+}
+
+#close {
+    float: right;
+    padding: 2px 5px;
+    color: #ccc;
+    font-size: medium;
+}
+
+span:hover {
+    cursor: pointer;
+}

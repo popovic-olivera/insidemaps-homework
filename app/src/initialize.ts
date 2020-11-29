@@ -19,7 +19,7 @@ export function intitRenderer(renderer: THREE.WebGLRenderer) {
 }
 
 export function initCamera(camera: THREE.PerspectiveCamera) {
-    camera.position.set(400, 0, 0);
+    camera.position.set(400, 100, 0);
 }
 
 export function initControls(controls: OrbitControls) {
