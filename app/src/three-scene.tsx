@@ -97,6 +97,7 @@ class ThreeScene extends Component<{}, sceneState > {
 
     const canvas = renderer.domElement; 
     canvas.addEventListener('click', (event) => { this.onMouseClick(event, camera, scene, renderer)}, false);
+    canvas.addEventListener('touchstart', (event) => { this.onMouseClick(event, camera, scene, renderer)}, false);
   }
 
   onMouseClick(event: any, camera: THREE.PerspectiveCamera, 

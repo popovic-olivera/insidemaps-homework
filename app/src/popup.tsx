@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { ChangeEvent, Component } from "react";
 import * as THREE from "three";
 
 import './popup.css';
@@ -10,13 +10,29 @@ type PopupProp = {
 }
 
 class Popup extends Component<PopupProp, {}>{
+    constructor(props: PopupProp) {
+        super(props);
+
+        this.nameChanged = this.nameChanged.bind(this);
+        this.sizeChanged = this.sizeChanged.bind(this);
+        this.colorChanged = this.colorChanged.bind(this);
+    }
+
     exit() {
         const popup = document.querySelector('.popup') as HTMLDivElement;
         popup.style.display = 'none';
     }
 
-    nameChanged() {
-        
+    nameChanged(e: ChangeEvent<HTMLInputElement>) {
+        this.props.box.name = e.target.value;
+    }
+
+    sizeChanged(e: ChangeEvent<HTMLInputElement>) {
+        this.props.box.scale.x = parseInt(e.target.value);
+    }
+
+    colorChanged(e: ChangeEvent<HTMLInputElement>) {
+        (this.props.box.material as THREE.MeshPhongMaterial).color = new THREE.Color(e.target.value);
     }
 
     render() {
@@ -31,13 +47,13 @@ class Popup extends Component<PopupProp, {}>{
                     <p style={{textAlign: "center"}}><strong>Info</strong></p>
 
                     <label htmlFor="name">Name:</label>
-                    <input id="name" name="name" value={this.props.box.geometry.name} onChange={this.nameChanged}/>
+                    <input id="name" name="name" defaultValue={this.props.box.geometry.name} onChange={this.nameChanged}/>
 
-                    <label htmlFor="name">Size:</label>
-                    <input id="size" name="size" value={sizeVec.x} disabled/>
+                    <label htmlFor="size">Size:</label>
+                    <input id="size" name="size" defaultValue={sizeVec.x} onChange={this.sizeChanged}/>
 
-                    <label htmlFor="name">Color:</label>
-                    <input id="color" name="color" value={color.getHexString()} disabled/>
+                    <label htmlFor="color">Color:</label>
+                    <input id="color" name="color" defaultValue={color.getHexString()} onChange={this.colorChanged}/>
                 </div>;
     }
 }
