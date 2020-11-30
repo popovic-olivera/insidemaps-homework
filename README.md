@@ -1,4 +1,4 @@
-# insidemaps-homework
+# Homework
 
 ## :hammer: How to run?
 
@@ -9,3 +9,5 @@
 - npm install
 
 - npm start
+
+### Live at: https://popovic-olivera.github.io/insidemaps-homework/
