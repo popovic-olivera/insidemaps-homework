@@ -6,10 +6,9 @@ export class Box {
 
     constructor(boxSize: number) {
         const geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
-        const material = new THREE.MeshPhongMaterial({  specular: 0xD76531,
-                                                        color: 0xef8834,
-                                                        emissive: 0x8c2317,
+        const material = new THREE.MeshPhongMaterial({  color: 0x156289,
                                                         shininess: 50,
+                                                        side: THREE.DoubleSide,
                                                         flatShading: true 
                                                     });
         Box.counter += 1;

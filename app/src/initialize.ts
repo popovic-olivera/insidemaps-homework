@@ -6,16 +6,20 @@ export function initScene(scene: THREE.Scene) {
     scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
 
     // Add Lighting
-    const light = new THREE.DirectionalLight(0xfdfdfd, 2);
-    light.position.set(400, 500, 0).normalize();
-    scene.add(light);
+    const pointLight = new THREE.PointLight(0xffffff, 1, 0);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 
-    const ambientLight = new THREE.AmbientLight(0x000022);
+    pointLight.position.set(0, 1000, 0);
+    ambientLight.position.set(1000, 1000, 1000);
+
+    scene.add(pointLight);
     scene.add(ambientLight);
 }
 
 export function intitRenderer(renderer: THREE.WebGLRenderer) {
+    renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0xcccccc, 1);
 }
 
 export function initCamera(camera: THREE.PerspectiveCamera) {

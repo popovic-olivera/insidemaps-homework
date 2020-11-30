@@ -9,8 +9,11 @@ import { initCamera, initControls, initScene, intitRenderer } from "./initialize
 import './three-scene.css';
 
 type sceneState = {
-  x: number,
-  y: number,
+  x2D: number,
+  y2D: number,
+  x3D: number,
+  y3D: number,
+  z3D: number,
   box: THREE.Mesh
 }
 
@@ -22,8 +25,11 @@ class ThreeScene extends Component<{}, sceneState > {
     super(props);
 
     this.state = {
-      x: 0,
-      y: 0,
+      x2D: 0,
+      y2D: 0,
+      x3D: 0,
+      y3D: 0,
+      z3D: 0,
       box: new THREE.Mesh()
     };
 
@@ -66,16 +72,33 @@ class ThreeScene extends Component<{}, sceneState > {
       scene.add(box.getOriginalBox);
     }
 
-    const animate = function () {
-      requestAnimationFrame(animate);
+    function animate(thisObject: ThreeScene) {
+      requestAnimationFrame(function() {animate(thisObject);});
   
       controls.update();
 
-      renderer.render(scene, camera);
+      const popup = document.querySelector('.popup') as HTMLDivElement;
+      if (popup.style.display === 'block') {
+        const canvas = renderer.domElement; 
+        const vector = new THREE.Vector3(thisObject.state.x3D, thisObject.state.y3D, thisObject.state.z3D);
+        
+        vector.project(camera);
+
+        vector.x = Math.round((0.5 + vector.x / 2) * (canvas.width / window.devicePixelRatio));
+        vector.y = Math.round((0.5 - vector.y / 2) * (canvas.height / window.devicePixelRatio));
+
+        thisObject.setState(() => ({
+          x2D: vector.x,
+          y2D: vector.y
+        }));
+        
+      }
+
+        renderer.render(scene, camera);
     };
 
     this.setWindowListeners(camera, renderer, scene);
-    animate();
+    animate(this);
   }
 
   setWindowListeners(camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer,
@@ -97,7 +120,6 @@ class ThreeScene extends Component<{}, sceneState > {
 
     const canvas = renderer.domElement; 
     canvas.addEventListener('click', (event) => { this.onMouseClick(event, camera, scene, renderer)}, false);
-    canvas.addEventListener('touchstart', (event) => { this.onMouseClick(event, camera, scene, renderer)}, false);
   }
 
   onMouseClick(event: any, camera: THREE.PerspectiveCamera, 
@@ -121,12 +143,17 @@ class ThreeScene extends Component<{}, sceneState > {
 
       if (mesh.geometry.type.includes('Box') && popup.style.display === 'none')
       {
+        const position3D = intersects[0].point; 
+        
         mouse.x = Math.round((0.5 + mouse.x / 2) * (canvas.width / window.devicePixelRatio));
         mouse.y = Math.round((0.5 - mouse.y / 2) * (canvas.height / window.devicePixelRatio));
         
         this.setState(() => ({
-          x: mouse.x,
-          y: mouse.y,
+          x2D: mouse.x,
+          y2D: mouse.y,
+          x3D: position3D.x,
+          y3D: position3D.y,
+          z3D: position3D.z,
           box: mesh
         }));
 
@@ -139,8 +166,8 @@ class ThreeScene extends Component<{}, sceneState > {
 
   render() {
     const props = {
-      x: this.state.x,
-      y: this.state.y,
+      x: this.state.x2D,
+      y: this.state.y2D,
       box: this.state.box
     };
 
