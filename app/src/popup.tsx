@@ -30,6 +30,7 @@ class Popup extends Component<PopupProp, {}>{
             this.props.box.geometry.name = (e.target as HTMLInputElement).value;
 
             (e.target as HTMLInputElement).value = '';
+            this.forceUpdate();
         }
     }
 
