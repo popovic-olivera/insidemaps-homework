@@ -1,14 +1,18 @@
-import * as THREE from "three";
+import * as THREE from 'three';
+
+/*
+*   Wrapper class for drawing boxes in THREE.js
+*/
 
 export class Box {
+    public static readonly BOX_SIZE = 70;
     private static counter = 0;
     private originalBox: THREE.Mesh;
 
     constructor(boxSize: number) {
-        const geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+        const geometry = new THREE.BoxBufferGeometry(boxSize, boxSize, boxSize);
         const material = new THREE.MeshPhongMaterial({  color: 0x156289,
                                                         shininess: 50,
-                                                        side: THREE.DoubleSide,
                                                         flatShading: true 
                                                     });
         Box.counter += 1;
@@ -17,8 +21,8 @@ export class Box {
         this.originalBox = new THREE.Mesh(geometry, material);
     }
 
-    setPosition(x = 0, y = 0, z = 0) {
-        this.originalBox.position.set(x, y, z);
+    setPosition(vector: THREE.Vector3) {
+        this.originalBox.position.set(vector.x, vector.y, vector.z);
     }
 
     get getOriginalBox() {

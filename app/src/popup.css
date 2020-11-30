@@ -2,7 +2,10 @@
     position: absolute;
     display: none;
     z-index: 100;
-    padding: 1em;
+    padding-top: 1em;
+    padding-left: 1.5em;
+    padding-right: 1em;
+    padding-bottom: 1.5em;
     width: 200px;
     color: #fff;
     background: rgba(0, 0, 0, 0.8);
@@ -11,13 +14,21 @@
     line-height: 1.2;
 }
 
-#close {
+#heading {
+    text-align: 'center';
+}
+
+input {
+    display: block;
+}
+
+.close {
     float: right;
     padding: 2px 5px;
     color: #ccc;
     font-size: medium;
 }
 
-span:hover {
+.close:hover {
     cursor: pointer;
 }

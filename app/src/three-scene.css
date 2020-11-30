@@ -1,3 +1,21 @@
 #scene {
+    position: relative;
     cursor: pointer;
+}
+
+.resetBtn {
+    position: absolute;
+    left: 2%;
+    top: 2%;
+    font-size: large;
+    padding: 0.5%;
+    font-weight: bold;
+    border-color: #3498db;
+    box-shadow: 0 0 40px 40px #3498db inset, 0 0 0 0 #3498db;
+    -webkit-transition: all 150ms ease-in-out;
+    transition: all 150ms ease-in-out;
+}
+
+.resetBtn:hover {
+    box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
 }

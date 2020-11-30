@@ -1,4 +1,8 @@
-import * as THREE from "three";
+import * as THREE from 'three';
+
+/*
+*   Wrapper class for drawing plane in THREE.js
+*/
 
 export class Plane {
     private originalPlane: THREE.Mesh;
@@ -12,14 +16,14 @@ export class Plane {
         this.originalPlane = new THREE.Mesh(geometry, material);
     }
 
-    setPosition(x = 0, y = 0, z = 0) {
-        this.originalPlane.position.set(x, y, z);
+    setPosition(vector: THREE.Vector3) {
+        this.originalPlane.position.set(vector.x, vector.y, vector.z);
     }
 
-    rotate(x = 0, y = 0, z = 0) {
-        this.originalPlane.rotateX(x);
-        this.originalPlane.rotateY(y);
-        this.originalPlane.rotateZ(z);
+    rotate(vector: THREE.Vector3) {
+        this.originalPlane.rotateX(vector.x);
+        this.originalPlane.rotateY(vector.y);
+        this.originalPlane.rotateZ(vector.z);
     }
 
     get getOriginalPlane() {
