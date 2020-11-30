@@ -1,4 +1,4 @@
-import { ChangeEvent, Component } from "react";
+import { Component } from "react";
 import * as THREE from "three";
 
 import './popup.css';
@@ -10,12 +10,13 @@ type PopupProp = {
 }
 
 class Popup extends Component<PopupProp, {}>{
+
     constructor(props: PopupProp) {
         super(props);
 
-        this.nameChanged = this.nameChanged.bind(this);
-        this.sizeChanged = this.sizeChanged.bind(this);
-        this.colorChanged = this.colorChanged.bind(this);
+        this.nameEnter = this.nameEnter.bind(this);
+        this.sizeEnter = this.sizeEnter.bind(this);
+        this.colorEnter = this.colorEnter.bind(this);
     }
 
     exit() {
@@ -23,22 +24,45 @@ class Popup extends Component<PopupProp, {}>{
         popup.style.display = 'none';
     }
 
-    nameChanged(e: ChangeEvent<HTMLInputElement>) {
-        this.props.box.name = e.target.value;
+    nameEnter(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === 'Enter') {
+            this.props.box.geometry.name = (e.target as HTMLInputElement).value;
+
+            (e.target as HTMLInputElement).value = '';
+        }
     }
 
-    sizeChanged(e: ChangeEvent<HTMLInputElement>) {
-        this.props.box.scale.x = parseInt(e.target.value);
+    sizeEnter(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === 'Enter') {
+            let sizeVec = new THREE.Vector3(0, 0, 0);
+            this.props.box.geometry.computeBoundingBox();
+            this.props.box.geometry.boundingBox?.getSize(sizeVec);
+
+            const oldSize = sizeVec.x;
+            const newSize: number = parseInt((e.target as HTMLInputElement).value);
+            
+            const scaleValue = newSize/oldSize;
+
+            this.props.box.scale.x = scaleValue;
+            this.props.box.scale.y = scaleValue;
+            this.props.box.scale.z = scaleValue;
+
+            (e.target as HTMLInputElement).value = '';
+        }
     }
 
-    colorChanged(e: ChangeEvent<HTMLInputElement>) {
-        (this.props.box.material as THREE.MeshPhongMaterial).color = new THREE.Color(e.target.value);
+    colorEnter(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === 'Enter') {
+            (this.props.box.material as THREE.MeshPhongMaterial).color = new THREE.Color((e.target as HTMLInputElement).value);
+            (e.target as HTMLInputElement).value = '';
+        }
     }
 
     render() {
-        this.props.box.geometry.computeBoundingBox();
         let sizeVec = new THREE.Vector3(0, 0, 0);
+        this.props.box.geometry.computeBoundingBox();
         this.props.box.geometry.boundingBox?.getSize(sizeVec);
+
         let color = (this.props.box.material as THREE.MeshPhongMaterial).color;
 
         return  <div className="popup" style={{top: this.props.y, left: this.props.x}}>
@@ -46,14 +70,26 @@ class Popup extends Component<PopupProp, {}>{
 
                     <p style={{textAlign: "center"}}><strong>Info</strong></p>
 
-                    <label htmlFor="name">Name:</label>
-                    <input id="name" name="name" defaultValue={this.props.box.geometry.name} onChange={this.nameChanged}/>
+                    <label htmlFor="name">
+                        Name: {this.props.box.geometry.name}
+                        <br />
+                        Enter new name: 
+                    </label>
+                    <input id="name" name="name" type="text" onKeyDown={this.nameEnter}/>
 
-                    <label htmlFor="size">Size:</label>
-                    <input id="size" name="size" defaultValue={sizeVec.x} onChange={this.sizeChanged}/>
+                    <label htmlFor="size">
+                        Size: {sizeVec.x}
+                        <br />
+                        Enter new size: 
+                    </label>
+                    <input id="size" name="size" type="number" onKeyDown={this.sizeEnter}/>
 
-                    <label htmlFor="color">Color:</label>
-                    <input id="color" name="color" defaultValue={color.getHexString()} onChange={this.colorChanged}/>
+                    <label htmlFor="color">
+                        Color: {color.getHexString()}
+                        <br />
+                        Enter new color: 
+                    </label>
+                    <input id="color" color="name" type="text" onKeyDown={this.colorEnter}/>
                 </div>;
     }
 }

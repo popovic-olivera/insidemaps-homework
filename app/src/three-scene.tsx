@@ -120,9 +120,10 @@ class ThreeScene extends Component<{}, sceneState > {
 
     const canvas = renderer.domElement; 
     canvas.addEventListener('click', (event) => { this.onMouseClick(event, camera, scene, renderer)}, false);
+    canvas.addEventListener('touchstart', (event) => { this.onMouseClick(event, camera, scene, renderer)}, false);
   }
 
-  onMouseClick(event: any, camera: THREE.PerspectiveCamera, 
+  onMouseClick(event: MouseEvent | TouchEvent, camera: THREE.PerspectiveCamera, 
                scene: THREE.Scene, renderer: THREE.WebGLRenderer) {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
@@ -130,10 +131,23 @@ class ThreeScene extends Component<{}, sceneState > {
     const canvas = renderer.domElement; 
 
     // map to (-1, 1) interval
-    mouse.x = (event.clientX / canvas.width) * 2 - 1;
-    mouse.y = - (event.clientY / canvas.height) * 2 + 1;
+    if (event instanceof MouseEvent) {
+      mouse.x = (event.clientX / canvas.width) * 2 - 1;
+      mouse.y = - (event.clientY / canvas.height) * 2 + 1;
 
-    raycaster.setFromCamera(mouse, camera);
+      raycaster.setFromCamera(mouse, camera);
+
+      mouse.x = Math.round((0.5 + mouse.x / 2) * (canvas.width / window.devicePixelRatio));
+      mouse.y = Math.round((0.5 - mouse.y / 2) * (canvas.height / window.devicePixelRatio));
+    } else {
+      mouse.x = ((event as TouchEvent).touches[0].clientX / window.innerWidth) * 2 - 1;
+      mouse.y = - ((event as TouchEvent).touches[0].clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      mouse.x = Math.round((0.5 + mouse.x / 2) * (window.innerWidth / window.devicePixelRatio));
+      mouse.y = Math.round((0.5 - mouse.y / 2) * (window.innerHeight / window.devicePixelRatio));
+    }
     
     const intersects = raycaster.intersectObjects(scene.children);
   
@@ -144,9 +158,6 @@ class ThreeScene extends Component<{}, sceneState > {
       if (mesh.geometry.type.includes('Box') && popup.style.display === 'none')
       {
         const position3D = intersects[0].point; 
-        
-        mouse.x = Math.round((0.5 + mouse.x / 2) * (canvas.width / window.devicePixelRatio));
-        mouse.y = Math.round((0.5 - mouse.y / 2) * (canvas.height / window.devicePixelRatio));
         
         this.setState(() => ({
           x2D: mouse.x,
